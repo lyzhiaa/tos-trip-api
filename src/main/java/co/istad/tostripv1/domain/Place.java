@@ -46,8 +46,6 @@ public class Place {
     private Double longitude;
 
     @ElementCollection
-    @CollectionTable(name = "place_images", joinColumns = @JoinColumn(name = "place_id"))
-    @Column(name = "image_url")
     private List<String> imageUrls;
 
     @Column( unique = true, columnDefinition = "INT DEFAULT 0")

@@ -1,17 +1,13 @@
 package co.istad.tostripv1.feature.user;
 
-import co.istad.tostripv1.domain.AuthRequest;
 import co.istad.tostripv1.feature.user.dto.UserCreateRequest;
 import co.istad.tostripv1.feature.user.dto.UserResponse;
 import co.istad.tostripv1.feature.user.dto.UserUpdateRequest;
-import co.istad.tostripv1.security.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,19 +17,24 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
-    private AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+//    private final UserDetailsService userDetailsService;
 
+    // get me
+    @GetMapping("/me")
+    public UserResponse getMe(Authentication authentication) {
+        Jwt jwt = (Jwt) authentication.getPrincipal();
 
-    @PostMapping("/login")
-    public String login(@RequestBody AuthRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        if (!authentication.isAuthenticated()) {
-            throw new UsernameNotFoundException("Invalid username or password.");
+        // Extract username from "jti"
+        String username = jwt.getClaim("jti"); // Use "jti" instead of "sub"
+
+        if (username == null) {
+            throw new RuntimeException("Username not found in token claims");
         }
-        return jwtService.generateToken(request.getUsername()); // Generate a JWT token
+
+        System.out.println("Extracted username: " + username); // Debugging log
+        return userService.getUserByUsername(username);
     }
+
 
     // create user
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,7 +42,6 @@ public class UserController {
     UserResponse createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) {
         return userService.createUser(userCreateRequest);
     }
-
     // get all users
     @GetMapping
     List<UserResponse> getAllUsers() {

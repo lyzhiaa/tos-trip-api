@@ -14,3 +14,15 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  #handle file size
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 5MB
+#file-upload:
+#  server-path: D://TosTrip//images-upload
+#  base-uri: http://localhost:8080/upload/
+file-upload:
+  server-path: D://TosTrip//tos-trip-upload//
+  base-uri: http://localhost:8080/images/

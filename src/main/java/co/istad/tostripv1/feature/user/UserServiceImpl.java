@@ -4,9 +4,15 @@ import co.istad.tostripv1.domain.User;
 import co.istad.tostripv1.feature.user.dto.UserCreateRequest;
 import co.istad.tostripv1.feature.user.dto.UserResponse;
 import co.istad.tostripv1.feature.user.dto.UserUpdateRequest;
+import co.istad.tostripv1.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import co.istad.tostripv1.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,7 +25,6 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
     // create user
     @Override
     public UserResponse createUser(UserCreateRequest userCreateRequest) {

@@ -45,6 +45,9 @@ public class PlaceServiceImpl implements PlaceService {
     public PlaceResponse getPlaceByUuid(String uuid) {
         Place place = placeRepository.findByUuid(uuid)
                 .orElseThrow(() -> new RuntimeException("Place with uuid " + uuid + " not found"));
+        int newCount =  place.getViewsCount() +1;
+        place.setViewsCount(newCount);
+        placeRepository.save(place);
         return placeMapper.toPlaceResponse(place);
     }
 
@@ -64,6 +67,7 @@ public class PlaceServiceImpl implements PlaceService {
     public void deletePlace(String uuid) {
         Place place = placeRepository.findByUuid(uuid)
                 .orElseThrow(() -> new RuntimeException("Place with uuid " + uuid + " not found"));
+
         placeRepository.delete(place);
 
     }
