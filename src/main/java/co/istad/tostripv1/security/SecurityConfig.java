@@ -48,11 +48,14 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/api/v1/reviews/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/places/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/v1/places/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/places/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/places/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-                .requestMatchers("/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/v1/roles/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/v1/roles/**").hasAuthority("ROLE_USER")
+                .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/v1/roles/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2

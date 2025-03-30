@@ -54,6 +54,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleRepository.findByUuid(uuid)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
         roleMapper.fromRoleUpdateRequest(roleUpdateRequest, role);
+        role.setName("ROLE_" + roleUpdateRequest.name().toUpperCase());
         roleRepository.save(role);
         return roleMapper.toRoleResponse(role);
     }

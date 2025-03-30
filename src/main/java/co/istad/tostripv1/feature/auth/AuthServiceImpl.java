@@ -77,6 +77,7 @@ public class AuthServiceImpl implements AuthService {
         return userMapper.toUserResponse(user);
     }
 
+    // login
     @Override
     public AuthResponse login(LoginRequest loginRequest) {
         Authentication auth = new UsernamePasswordAuthenticationToken

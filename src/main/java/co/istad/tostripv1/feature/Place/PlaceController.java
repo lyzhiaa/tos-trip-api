@@ -37,7 +37,7 @@ public class PlaceController {
 
     // update place
     @PatchMapping("/{uuid}")
-    PlaceResponse updatePlace(@Valid @PathVariable("uuid") String uuid, PlaceUpdateRequest placeUpdateRequest) {
+    PlaceResponse updatePlace(@Valid @PathVariable("uuid") String uuid, @RequestBody PlaceUpdateRequest placeUpdateRequest) {
         return placeService.updatePlace(uuid, placeUpdateRequest);
     }
 

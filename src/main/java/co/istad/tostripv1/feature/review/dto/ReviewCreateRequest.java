@@ -1,9 +1,6 @@
 package co.istad.tostripv1.feature.review.dto;
 
 import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
-
 
 public record ReviewCreateRequest(
         @Column(nullable = false)

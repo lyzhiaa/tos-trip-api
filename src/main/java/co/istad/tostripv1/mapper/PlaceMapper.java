@@ -1,5 +1,6 @@
 package co.istad.tostripv1.mapper;
 
+import co.istad.tostripv1.domain.Category;
 import co.istad.tostripv1.domain.Place;
 import co.istad.tostripv1.feature.Place.dto.PlaceCreateRequest;
 import co.istad.tostripv1.feature.Place.dto.PlaceResponse;

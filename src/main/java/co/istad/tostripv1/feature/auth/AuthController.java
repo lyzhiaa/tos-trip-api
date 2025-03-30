@@ -24,8 +24,9 @@ public class AuthController {
     @DeleteMapping("/{username}/roles/{roleName}")
     public ResponseEntity<?> removeRole(@PathVariable String username, @PathVariable String roleName) {
         authService.removeRoleFromUser(username, roleName);
-        return ResponseEntity.ok("Role " + roleName + " removed from user ID " + username);
+        return ResponseEntity.ok("Role " + roleName + " removed from user : " + username);
     }
+    // for debugging purpose
     @GetMapping
     public Map<String, Object> debugAuth(Authentication authentication) {
         List<String> authorities = authentication.getAuthorities().stream()
@@ -45,8 +46,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.addRoleToUser(username, addRoleCreateRequest));
     }
 
-
-
+    // register a new user
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     UserResponse register(@Valid @RequestBody UserCreateRequest registerRequest) {
