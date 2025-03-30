@@ -26,6 +26,7 @@ public class RoleServiceImpl implements RoleService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "This role already exists");
         }
         Role role = roleMapper.fromRoleCreateRequest(roleCreateRequest);
+        role.setName("ROLE_" + roleCreateRequest.name().toUpperCase());
         role.setUuid(UUID.randomUUID().toString());
         roleRepository.save(role);
 

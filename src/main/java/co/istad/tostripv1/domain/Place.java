@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
-
 @Entity
 @Table(name = "places")
 @Setter
@@ -23,9 +21,6 @@ public class Place {
     private String uuid;
     @Column( length = 255)
     private String name;
-
-    @Column(nullable = false)
-    private String categoryUuid;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -48,9 +43,6 @@ public class Place {
     @ElementCollection
     private List<String> imageUrls;
 
-    @Column( unique = true, columnDefinition = "INT DEFAULT 0")
-    private Integer viewsCount;
-
     @Column(updatable = false)
     private String createdAt;
 
@@ -62,7 +54,7 @@ public class Place {
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn()
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
     private Category category;
 }

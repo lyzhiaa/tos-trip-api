@@ -22,6 +22,8 @@ import java.util.UUID;
 
 @Component
 public class JwtConfig {
+
+
     @Bean("accessTokenKeyPair")
     KeyPair accessTokenKeyPair() throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");

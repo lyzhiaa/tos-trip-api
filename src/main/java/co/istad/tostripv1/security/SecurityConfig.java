@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
@@ -21,6 +21,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
+
 
     @Bean
     JwtAuthenticationProvider configJwtAuthenticationProvider(@Qualifier("refreshTokenJwtDecoder")
@@ -39,31 +41,28 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain configureApiSecurity(HttpSecurity httpSecurity,
                                              @Qualifier("accessTokenJwtDecoder") JwtDecoder jwtDecoder) throws Exception {
-        //endpoint security config
         httpSecurity.authorizeHttpRequests(endpoint -> endpoint
                 .requestMatchers("/images/**").permitAll()
                 .requestMatchers("/api/v1/upload/**").permitAll()
-//                .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/user/**").hasAnyAuthority("admin", "ADMIN")
-                .requestMatchers("/api/v1/user/**").hasAnyAuthority("admin", "ADMIN")
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/api/v1/reviews/**").permitAll()
-                .requestMatchers("/api/v1/roles/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
-                .requestMatchers("/api/v1/places/**").hasAnyAuthority("admin", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/places/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/places/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-                .requestMatchers("/api/v1/categories/**").hasAnyAuthority("admin", "ADMIN")
-//                .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
-//                .anyRequest().permitAll());
+                .requestMatchers("/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/roles/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/roles/**").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated());
 
-        httpSecurity.oauth2ResourceServer(jwt -> jwt.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)));
+        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter)));
 
-        //disable CSRF (Cross site request forgery) token
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        //Make Stateless Session
+        httpSecurity.csrf(csrf -> csrf.disable());
         httpSecurity.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return httpSecurity.build();
     }
 }

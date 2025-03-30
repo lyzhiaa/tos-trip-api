@@ -4,6 +4,7 @@ import co.istad.tostripv1.domain.Role;
 import co.istad.tostripv1.domain.User;
 import co.istad.tostripv1.feature.auth.dto.*;
 import co.istad.tostripv1.feature.role.RoleRepository;
+import co.istad.tostripv1.feature.role.dto.RoleUpdateRequest;
 import co.istad.tostripv1.feature.user.UserRepository;
 import co.istad.tostripv1.feature.user.dto.UserCreateRequest;
 import co.istad.tostripv1.feature.user.dto.UserResponse;
@@ -23,15 +24,14 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
         List<Role> roles = new ArrayList<>();
         Role userRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "User Role not set."));
+                        "Role not found: ROLE_USER"));
         roles.add(userRole);
         user.setRoles(roles);
         userRepository.save(user);
@@ -100,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
                 .subject("Access APIs")
                 .issuer(auth.getName())
                 .issuedAt(now)
-                .expiresAt(now.plus(10, ChronoUnit.SECONDS))
+                .expiresAt(now.plus(30, ChronoUnit.DAYS))
                 .audience(List.of("NextJS", "Android", "iOS"))
                 .claim("scope", scope)
                 .build();
@@ -196,6 +196,48 @@ public class AuthServiceImpl implements AuthService {
 //                .refreshToken(refreshToken)
 //                .refreshToken(refreshTokenRequest.refreshToken())
                 .build();
+    }
+
+    // add more role to user
+    @Override
+    public UserResponse addRoleToUser(String username, AddRoleCreateRequest addRoleCreateRequest) {
+        // Find the user
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        // Fetch existing roles
+        Set<Role> existingRoles = new HashSet<>(user.getRoles());
+
+        // Fetch new roles
+        for (String roleName : addRoleCreateRequest.roles()) {
+            String formattedRoleName = "ROLE_" + roleName.trim().toUpperCase();
+            Role role = roleRepository.findByName(formattedRoleName)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found: " + formattedRoleName));
+            existingRoles.add(role);
+        }
+
+        // Update user roles
+        user.setRoles(new ArrayList<>(existingRoles));
+        userRepository.save(user);
+
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public void removeRoleFromUser(String username, String roleName) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Role role = roleRepository.findByName("ROLE_" + roleName.toUpperCase())
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        Set<Role> userRoles = new HashSet<>(user.getRoles());
+        if (userRoles.contains(role)) {
+            userRoles.remove(role);
+            user.setRoles(new ArrayList<>(userRoles));
+            userRepository.save(user);
+
+        }
     }
 
 }
