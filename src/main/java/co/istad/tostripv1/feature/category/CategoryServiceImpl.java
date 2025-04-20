@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -52,6 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryMapper.toCategoryResponse(category);
     }
+
 
     // get all categories
     @Override

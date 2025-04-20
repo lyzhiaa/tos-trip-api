@@ -1,10 +1,9 @@
-
 spring:
   application:
     name: tostrip-v1
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5900/tostrip_db
+    url: jdbc:postgresql://localhost:5900/tos_trip_db
     username: tostrip
     password: tostrip@1234
   jpa:

@@ -1,6 +1,5 @@
 package co.istad.tostripv1.feature.category.dto;
 
-import co.istad.tostripv1.domain.Place;
 import co.istad.tostripv1.feature.Place.dto.PlaceResponse;
 
 import java.util.List;

@@ -1,0 +1,33 @@
+services:
+  tos-trip-api:
+    image: "tos-trip-api"
+    build:
+      context: .
+    container_name: tos-trip-api
+    ports:
+      - "8169:8080" # Map the application port
+    environment:
+        - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - tos-trip-net
+    volumes:
+      - "./upload:/upload" # bind mount
+  tos-trip-db:
+    image: postgres:latest
+    container_name: tos-trip-db
+    ports:
+      - "5900:5432" # Map the application port
+    environment:
+      - POSTGRES_DB=tos_trip_db
+      - POSTGRES_PASSWORD=tostrip@1234
+      - POSTGRES_USER=tostrip
+    volumes:
+      - tostrip-pg-vol:/var/lib/postgresql/data
+    networks:
+        - tos-trip-net
+volumes:
+  tostrip-pg-vol:
+networks:
+  tos-trip-net:
+
+

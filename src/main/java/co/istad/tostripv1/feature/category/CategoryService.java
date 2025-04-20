@@ -12,6 +12,8 @@ public interface CategoryService {
     // get category by id
     CategoryResponse getCategory(String uuid);
 
+
+
     List<CategoryResponse> getCategories();
     // update category
 

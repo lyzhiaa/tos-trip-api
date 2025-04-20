@@ -14,6 +14,11 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 
 @Configuration
@@ -39,33 +44,56 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://202.178.125.77:8169",
+                "https://tostrip.eunglyzhia.social"
+        ));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+
+    @Bean
     SecurityFilterChain configureApiSecurity(HttpSecurity httpSecurity,
                                              @Qualifier("accessTokenJwtDecoder") JwtDecoder jwtDecoder) throws Exception {
-        httpSecurity.authorizeHttpRequests(endpoint -> endpoint
-                .requestMatchers("/images/**").permitAll()
-                .requestMatchers("/api/v1/upload/**").permitAll()
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/api/v1/reviews/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/places/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.PATCH, "/api/v1/places/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/places/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.PATCH, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/api/v1/roles/**").hasAuthority("ROLE_ADMIN")
-                .anyRequest().authenticated());
-
-        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter)));
-
-        httpSecurity.csrf(csrf -> csrf.disable());
-        httpSecurity.sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return httpSecurity.build();
+        return httpSecurity
+                .cors(cors -> cors
+                        .configurationSource(corsConfigurationSource()) // This line enables your CORS
+                )
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/api/v1/upload/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/v1/reviews/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
+                        .requestMatchers("/api/v1/places/**").permitAll()
+                        .requestMatchers("/api/v1/categories/**").permitAll()
+                        .requestMatchers("/api/v1/roles/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter)
+                        )
+                )
+                .build();
     }
+
+
 }
