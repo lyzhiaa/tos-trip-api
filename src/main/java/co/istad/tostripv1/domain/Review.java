@@ -20,8 +20,8 @@ public class Review{
 
     @Column(nullable = false)
     private String placeUuid;
-    @Column(nullable = false)
-    private String userUuid;
+//    @Column(nullable = false)
+//    private String userUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()

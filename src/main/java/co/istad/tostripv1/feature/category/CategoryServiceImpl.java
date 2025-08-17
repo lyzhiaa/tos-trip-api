@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findByUuid(uuid)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
 
-        Place place = new Place();
+//        Place place = new Place();
         category.setPlaces(placeRepository.findByCategoryUuid(uuid));
 
         return categoryMapper.toCategoryResponse(category);

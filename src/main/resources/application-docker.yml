@@ -1,10 +1,10 @@
 spring:
   datasource:
-    url: jdbc:postgresql://tos-trip-db:5432/tos_trip_db
+    url: jdbc:postgresql://136.228.158.126:3001/tos_der_leng
   config:
     activate:
       on-profile: docker
 
 file-upload:
   server-path: /upload/
-  base-uri: https://tostrip.eunglyzhia.social/images/
+  base-uri: https://tos-der.sokpheng.com/images/

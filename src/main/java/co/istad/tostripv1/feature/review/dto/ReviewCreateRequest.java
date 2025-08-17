@@ -5,8 +5,8 @@ import jakarta.persistence.Column;
 public record ReviewCreateRequest(
         @Column(nullable = false)
         String placeUuid,
-        @Column(nullable = false)
-        String userUuid,
+//        @Column(nullable = false)
+//        String userUuid,
 
 //        @Column(name = "user_id", nullable = false)
 //        Integer userId,

@@ -23,11 +23,11 @@ public class ReviewServiceImpl implements ReviewService {
     // create review
     @Override
     public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest) {
-        if (reviewRepository.existsByUserUuidAndPlaceUuid(
-                reviewCreateRequest.userUuid(),
-                reviewCreateRequest.placeUuid())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "This review already exists");
-        }
+//        if (reviewRepository.existsByPlaceUuid(
+////                reviewCreateRequest.userUuid(),
+//                reviewCreateRequest.placeUuid())) {
+//            throw new ResponseStatusException(HttpStatus.CONFLICT, "This review already exists");
+//        }
         Review review = reviewMapper.fromReviewCreateRequest(reviewCreateRequest);
         review.setUuid(UUID.randomUUID().toString());
         review.setCreatedAt(String.valueOf(LocalDateTime.now()));

@@ -10,7 +10,7 @@ public record ReviewResponse(
 //        Integer userId,
 //        Integer placeId,
         String placeUuid,
-        String userUuid,
+//        String userUuid,
         Integer rating,
         String review,
         String createdAt

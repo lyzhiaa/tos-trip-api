@@ -14,6 +14,8 @@ public record PlaceResponse(
         String openHours,
         Double entryFee,
         List<String> imageUrls,
+        Double latitude,
+        Double longitude,
         String location,
         String createdAt,
         String updatedAt,

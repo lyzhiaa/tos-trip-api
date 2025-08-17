@@ -5,7 +5,7 @@ services:
       context: .
     container_name: tos-trip-api
     ports:
-      - "8169:8080" # Map the application port
+      - "3002:8080" # Map the application port
     environment:
         - SPRING_PROFILES_ACTIVE=docker
     networks:
@@ -16,11 +16,11 @@ services:
     image: postgres:latest
     container_name: tos-trip-db
     ports:
-      - "5900:5432" # Map the application port
+      - "3001:5432" # Map the application port
     environment:
-      - POSTGRES_DB=tos_trip_db
-      - POSTGRES_PASSWORD=tostrip@1234
-      - POSTGRES_USER=tostrip
+      - POSTGRES_DB=tos_der_leng
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=tos_der
     volumes:
       - tostrip-pg-vol:/var/lib/postgresql/data
     networks:

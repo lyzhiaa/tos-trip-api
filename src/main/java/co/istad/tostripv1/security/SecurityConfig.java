@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -49,7 +50,15 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
+                "http://127.0.0.1:5500",
+                "http://127.0.0.1:5501",
+                "http://localhost:5500",
+                "http://localhost:5501",
                 "http://202.178.125.77:8169",
+                "https://derlg.vercel.app/",
+                "https://derleng.vercel.app/",
+                "derleng.eunglyzhia.social",
+                "https://deploy-final-project-q3sq.vercel.app/",
                 "https://tostrip.eunglyzhia.social"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
@@ -65,7 +74,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain configureApiSecurity(HttpSecurity httpSecurity,
-                                             @Qualifier("accessTokenJwtDecoder") JwtDecoder jwtDecoder) throws Exception {
+                                             @Qualifier("accessTokenJwtDecoder") JwtDecoder jwtDecoder, AbstractUserDetailsAuthenticationProvider abstractUserDetailsAuthenticationProvider) throws Exception {
         return httpSecurity
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource()) // This line enables your CORS
@@ -73,19 +82,20 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/api/v1/upload/**").permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/v1/reviews/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
-                        .requestMatchers("/api/v1/places/**").permitAll()
-                        .requestMatchers("/api/v1/categories/**").permitAll()
-                        .requestMatchers("/api/v1/roles/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(authorizeRequests ->authorizeRequests.anyRequest().permitAll())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/images/**").permitAll()
+//                        .requestMatchers("/api/v1/upload/**").permitAll()
+//                        .requestMatchers("/api/v1/auth/**").permitAll()
+//                        .requestMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers("/api/v1/reviews/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
+//                        .requestMatchers("/api/v1/places/**").permitAll()
+//                        .requestMatchers("/api/v1/categories/**").permitAll()
+//                        .requestMatchers("/api/v1/roles/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder)

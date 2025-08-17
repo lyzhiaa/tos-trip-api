@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, String> {
     Boolean existsByUserUuidAndPlaceUuid(String userUuid, String placeUuid);
+    Boolean existsByPlaceUuid(String placeUuid);
     Boolean existsByUserIdAndPlaceId(Integer userId, Integer placeId);
     Optional<Review> findByUserUuidAndPlaceUuid(String userUuid, String placeUuid);
     Optional<Review> findByUuid(String uuid);
