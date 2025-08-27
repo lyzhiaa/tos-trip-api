@@ -4,7 +4,6 @@ import co.istad.tostripv1.domain.Role;
 import co.istad.tostripv1.domain.User;
 import co.istad.tostripv1.feature.auth.dto.*;
 import co.istad.tostripv1.feature.role.RoleRepository;
-import co.istad.tostripv1.feature.role.dto.RoleUpdateRequest;
 import co.istad.tostripv1.feature.user.UserRepository;
 import co.istad.tostripv1.feature.user.dto.UserCreateRequest;
 import co.istad.tostripv1.feature.user.dto.UserResponse;
@@ -24,7 +23,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;

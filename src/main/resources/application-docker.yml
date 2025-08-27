@@ -1,10 +1,10 @@
 spring:
   datasource:
-    url: jdbc:postgresql://136.228.158.126:3001/tos_der_leng
+    url: jdbc:postgresql://136.228.158.126:3001/tos_der_new
   config:
     activate:
       on-profile: docker
 
 file-upload:
   server-path: /upload/
-  base-uri: https://tos-der.sokpheng.com/images/
+  base-uri: https://derleng-api.eunglyzhia.social/

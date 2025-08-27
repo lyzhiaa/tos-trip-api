@@ -55,10 +55,10 @@ public class SecurityConfig {
                 "http://localhost:5500",
                 "http://localhost:5501",
                 "http://202.178.125.77:8169",
-                "https://derlg.vercel.app/",
-                "https://derleng.vercel.app/",
-                "derleng.eunglyzhia.social",
-                "https://deploy-final-project-q3sq.vercel.app/",
+                "https://derlg.vercel.app",
+                "https://derleng.vercel.app",
+                "https://derleng.eunglyzhia.social",
+                "https://deploy-final-project-q3sq.vercel.app",
                 "https://tostrip.eunglyzhia.social"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));

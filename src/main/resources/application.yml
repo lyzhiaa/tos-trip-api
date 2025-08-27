@@ -3,7 +3,7 @@ spring:
     name: tostrip-v1
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://136.228.158.126:3001/tos_der_leng
+    url: jdbc:postgresql://136.228.158.126:3001/tos_der_new
     username: tos_der
     password: 1234
   jpa:
