@@ -27,7 +27,7 @@ public class ResourceHandlerConfig implements WebMvcConfigurer {
                         "http://127.0.0.1:5500",
                         "http://127.0.0.1:5501",
                         "http://202.178.125.77:8169",
-                        "https://tostrip.eunglyzhia.social")
+                        "https://derleng-eunglyzhia-social.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

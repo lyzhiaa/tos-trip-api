@@ -71,7 +71,7 @@ public class UserController {
         userService.disableUser(uuid);
     }
 
-    // disable user by uuid
+    // enable user by uuid
     @PatchMapping("/{uuid}/enable")
     void enableUser(@PathVariable("uuid") String uuid) {
         userService.enableUser(uuid);

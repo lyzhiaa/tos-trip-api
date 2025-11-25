@@ -16,11 +16,11 @@ services:
     image: postgres:latest
     container_name: tos-trip-db
     ports:
-      - "3001:5432" # Map the application port
+      - "5435:5432" # Map the application port
     environment:
-      - POSTGRES_DB=tos_der_leng
+      - POSTGRES_DB=postgres
       - POSTGRES_PASSWORD=1234
-      - POSTGRES_USER=tos_der
+      - POSTGRES_USER=test
     volumes:
       - tostrip-pg-vol:/var/lib/postgresql/data
     networks:

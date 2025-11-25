@@ -59,7 +59,7 @@ public class SecurityConfig {
                 "https://derleng.vercel.app",
                 "https://derleng.eunglyzhia.social",
                 "https://deploy-final-project-q3sq.vercel.app",
-                "https://tostrip.eunglyzhia.social"
+                "https://derleng-eunglyzhia-social.vercel.app"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
