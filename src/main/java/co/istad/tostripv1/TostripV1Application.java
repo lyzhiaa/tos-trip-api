@@ -9,5 +9,4 @@ public class TostripV1Application {
     public static void main(String[] args) {
         SpringApplication.run(TostripV1Application.class, args);
     }
-
 }

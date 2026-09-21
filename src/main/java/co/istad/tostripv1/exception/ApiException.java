@@ -11,7 +11,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApiException {
-
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<?> handleResponseStatusException(ResponseStatusException e) {
         ErrorResponse<?> errorResponse = ErrorResponse.builder()
@@ -22,7 +21,6 @@ public class ApiException {
                 .status(e.getStatusCode())
                 .body(Map.of("error", errorResponse));
     }
-
     // Catch RuntimeException
     @ExceptionHandler(RuntimeException.class)
     ResponseEntity<?> handleRuntimeException(RuntimeException e) {
